@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # ============================================
-# STEP 1: LOAD DATA
+# LOAD DATA
 # ============================================
 print("=" * 60)
 print("HYROX DATA PREPARATION FOR MONGODB")
@@ -11,10 +11,10 @@ print("=" * 60)
 file_path = r'C:\Users\aldox\Documents\Master UCM Data Science\BDD_NoSQL\Tarea\hyrox_results.csv'
 
 df = pd.read_csv(file_path, encoding='windows-1252')
-print(f"\n✓ Loaded dataset: {df.shape[0]:,} rows, {df.shape[1]} columns")
+print(f"Loaded dataset: {df.shape[0]:,} rows, {df.shape[1]} columns")
 
 # ============================================
-# STEP 2: FIX EVENT NAMES (ENCODING ISSUES)
+# FIX EVENT NAMES (ENCODING ISSUES)
 # ============================================
 print("\n" + "=" * 60)
 print("FIXING EVENT NAMES")
@@ -34,7 +34,7 @@ print("✓ Fixed encoding issues in event names")
 print(f"  - Updated {len(event_corrections)} events")
 
 # ============================================
-# STEP 3: CREATE is_championship COLUMN
+# CREATE is_championship COLUMN
 # ============================================
 print("\n" + "=" * 60)
 print("CREATING CHAMPIONSHIP FLAG")
@@ -47,7 +47,7 @@ print(f"  - Championship events: {df['is_championship'].sum():,}")
 print(f"  - Regular events: {(~df['is_championship']).sum():,}")
 
 # ============================================
-# STEP 4: EXTRACT YEAR AND CITY
+# EXTRACT YEAR AND CITY
 # ============================================
 print("\n" + "=" * 60)
 print("EXTRACTING EVENT YEAR AND CITY")
@@ -81,12 +81,12 @@ def extract_city(row):
 df['event_city'] = df.apply(extract_city, axis=1)
 df['event_year'] = df['event_year'].astype('Int64')
 
-print("✓ Extracted event_year and event_city")
+print("Extracted event_year and event_city")
 print(f"  - Years: {sorted(df['event_year'].dropna().unique())}")
 print(f"  - Unique cities: {df['event_city'].nunique()}")
 
 # ============================================
-# STEP 5: CONVERT TIMES TO SECONDS
+# CONVERT TIMES TO SECONDS
 # ============================================
 print("\n" + "=" * 60)
 print("CONVERTING TIMES TO SECONDS")
@@ -119,7 +119,7 @@ for col in time_columns:
 print(f"✓ Converted {len(time_columns)} time columns to seconds")
 
 # ============================================
-# STEP 6: VALIDATE ATHLETE COMPLETION
+# VALIDATE ATHLETE COMPLETION
 # ============================================
 print("\n" + "=" * 60)
 print("VALIDATING ATHLETE COMPLETION")
@@ -148,7 +148,7 @@ print(f"  - Invalid/DNF (Did Not Finish): {(~df['is_valid']).sum():,}")
 print(f"  - Completion rate: {(df['is_valid'].sum() / len(df) * 100):.2f}%")
 
 # ============================================
-# STEP 7: HANDLE MISSING VALUES
+# HANDLE MISSING VALUES
 # ============================================
 print("\n" + "=" * 60)
 print("HANDLING MISSING VALUES")
@@ -162,7 +162,7 @@ print(f"  - Nationality: {(df['nationality'] == 'Unknown').sum():,} set to 'Unkn
 print(f"  - Age group: {(df['age_group'] == 'Not specified').sum():,} set to 'Not specified'")
 
 # ============================================
-# STEP 8: STRUCTURE DATA FOR MONGODB
+# STRUCTURE DATA FOR MONGODB
 # ============================================
 print("\n" + "=" * 60)
 print("STRUCTURING DATA FOR MONGODB")
@@ -213,10 +213,10 @@ def create_mongo_document(row):
 
 print("Converting rows to MongoDB documents...")
 mongo_documents = [create_mongo_document(row) for _, row in df.iterrows()]
-print(f"✓ Created {len(mongo_documents):,} MongoDB documents")
+print(f"Created {len(mongo_documents):,} MongoDB documents")
 
 # ============================================
-# STEP 9: SAVE TO JSON FILE (NDJSON FORMAT)
+# SAVE TO JSON FILE (NDJSON FORMAT)
 # ============================================
 print("\n" + "=" * 60)
 print("SAVING TO JSON FILE")
@@ -233,7 +233,7 @@ print(f"  - Format: NDJSON (one document per line)")
 print(f"  - Total documents: {len(mongo_documents):,}")
 
 # ============================================
-# STEP 10: DATA SUMMARY
+# DATA SUMMARY
 # ============================================
 print("\n" + "=" * 60)
 print("DATA SUMMARY")
@@ -258,7 +258,7 @@ print(f"  - Regular events: {(~df['is_championship']).sum():,}")
 print(f"  - Championship events: {df['is_championship'].sum():,}")
 
 # ============================================
-# STEP 11: PREVIEW DOCUMENT STRUCTURE
+# PREVIEW DOCUMENT STRUCTURE
 # ============================================
 print("\n" + "=" * 60)
 print("SAMPLE DOCUMENT STRUCTURE")
@@ -266,5 +266,6 @@ print("=" * 60)
 print(json.dumps(mongo_documents[0], indent=2, ensure_ascii=False))
 
 print("\n" + "=" * 60)
-print("✓ DATA PREPARATION COMPLETE!")
+print("DATA PREPARATION COMPLETE")
+
 print("=" * 60)
